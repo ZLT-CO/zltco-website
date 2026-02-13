@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZLT Co.</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: #0f1117;
+    color: white;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 60px;
+    background: #161b22;
+}
+
+nav h1 {
+    font-weight: 800;
+    font-size: 1.3rem;
+}
+
+nav a {
+    text-decoration: none;
+    color: #aaa;
+    margin-left: 25px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    color: white;
+}
+
+.hero {
+    text-align: center;
+    padding: 120px 20px;
+}
+
+.hero h2 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    color: #aaa;
+    max-width: 600px;
+    margin: 0 auto 40px auto;
+    font-size: 1.1rem;
+}
+
+.btn {
+    background: #5865F2;
+    padding: 15px 35px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: #4752c4;
+}
+
+.section {
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.cards {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.card {
+    background: #161b22;
+    padding: 40px;
+    border-radius: 12px;
+    width: 280px;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    background: #1f2630;
+}
+
+.card h3 {
+    margin-bottom: 15px;
+}
+
+.card p {
+    color: #aaa;
+    font-size: 0.95rem;
+}
+
+.discord-section {
+    background: #161b22;
+    padding: 80px 20px;
+    text-align: center;
+}
+
+iframe {
+    margin-top: 40px;
+    border-radius: 12px;
+}
+
+footer {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 0.9rem;
+}
+</style>
+</head>
+<body>
+
+<nav>
+    <h1>ZLT Co.</h1>
+    <div>
+        <a href="#about">About</a>
+        <a href="#community">Community</a>
+        <a href="https://discord.gg/7SNY5thF" target="_blank">Join</a>
+    </div>
+</nav>
+
+<section class="hero">
+    <h2>Building Apps. Games. Community.</h2>
+    <p>
+        ZLT Co. is a growing tech-focused brand creating apps, experimenting with games,
+        and building a fun, welcoming community for everyone.
+    </p>
+    <a href="https://discord.gg/7SNY5thF" class="btn" target="_blank">
+        Join Our Discord
+    </a>
+</section>
+
+<section class="section" id="about">
+    <h2>What We Do</h2>
+    <div class="cards">
+        <div class="card">
+            <h3>Apps</h3>
+            <p>Clean, lightweight software like PCInfo designed to be simple and powerful.</p>
+        </div>
+        <div class="card">
+            <h3>Games</h3>
+            <p>Fun projects, experiments, and interactive experiences.</p>
+        </div>
+        <div class="card">
+            <h3>Community</h3>
+            <p>Polls, chat games, discussions, and a place for everyone — even if you're not into tech.</p>
+        </div>
+    </div>
+</section>
+
+<section class="discord-section" id="community">
+    <h2>Join the Community</h2>
+    <p style="color:#aaa; max-width:600px; margin: 0 auto;">
+        Talk tech, vote in polls, play games, or just hang out.
+        Everyone is welcome.
+    </p>
+
+    <iframe 
+        src="https://discord.com/widget?id=1460020196281553171&theme=dark"
+        width="350"
+        height="500"
+        allowtransparency="true"
+        frameborder="0"
+        sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts">
+    </iframe>
+</section>
+
+<footer>
+    © 2026 ZLT Co. All rights reserved.
+</footer>
+
+</body>
+</html>
