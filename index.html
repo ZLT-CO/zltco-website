@@ -12,57 +12,6 @@
 <link rel="manifest" href="site.webmanifest">
 
  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PWA Install Prompt</title>
-  <style>
-    #installBtn {
-      display: none;
-      padding: 10px 20px;
-      background: #0078d7;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    #installBtn:hover {
-      background: #005fa3;
-    }
-  </style>
-</head>
-<body>
-  <h1>My PWA</h1>
-  <button id="installBtn">Install App</button>
-
-  <script>
-    let deferredPrompt;
-    const installBtn = document.getElementById('installBtn');
-
-    // Listen for the beforeinstallprompt event
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault(); // Prevent auto prompt
-      deferredPrompt = e;
-      installBtn.style.display = 'inline-block'; // Show button
-    });
-
-    // Handle button click
-    installBtn.addEventListener('click', async () => {
-      if (!deferredPrompt) return;
-      deferredPrompt.prompt(); // Show install prompt
-      const { outcome } = await deferredPrompt.userChoice;
-      console.log(`User response: ${outcome}`);
-      deferredPrompt = null;
-      installBtn.style.display = 'none';
-    });
-
-    // Optional: Detect if already installed
-    window.addEventListener('appinstalled', () => {
-      console.log('PWA was installed');
-      installBtn.style.display = 'none';
-    });
-  </script>
-</body>
-</html>
 
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
@@ -355,6 +304,7 @@ footer{
 
 </body>
 </html>
+
 
 
 
