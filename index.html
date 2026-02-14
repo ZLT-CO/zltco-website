@@ -31,15 +31,15 @@ body{
     overflow-x:hidden;
 }
 
-/* Animated background glow */
+/* Animated background glow (RED) */
 body::before{
     content:"";
     position:fixed;
     width:200%;
     height:200%;
     background:
-        radial-gradient(circle at 20% 30%, #5865F2 0%, transparent 40%),
-        radial-gradient(circle at 80% 70%, #8b5cf6 0%, transparent 40%);
+        radial-gradient(circle at 20% 30%, #ff2d2d 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, #b30000 0%, transparent 40%);
     animation:move 18s infinite alternate ease-in-out;
     z-index:-1;
     opacity:0.15;
@@ -73,7 +73,7 @@ nav a{
 }
 
 nav a:hover{
-    color:white;
+    color:#ff4d4d;
 }
 
 .hero{
@@ -95,19 +95,19 @@ nav a:hover{
 }
 
 .btn{
-    background:#5865F2;
+    background:#ff2d2d;
     padding:15px 35px;
     border-radius:12px;
     text-decoration:none;
     color:white;
     font-weight:600;
     transition:0.3s;
-    box-shadow:0 0 25px rgba(88,101,242,0.5);
+    box-shadow:0 0 25px rgba(255,0,0,0.5);
 }
 
 .btn:hover{
-    background:#4752c4;
-    box-shadow:0 0 35px rgba(88,101,242,0.9);
+    background:#ff4d4d;
+    box-shadow:0 0 35px rgba(255,0,0,0.9);
 }
 
 .section{
@@ -134,7 +134,7 @@ nav a:hover{
 
 .card:hover{
     transform:translateY(-8px);
-    border-color:#5865F2;
+    border-color:#ff2d2d;
 }
 
 .card h3{
@@ -172,24 +172,26 @@ nav a:hover{
 .download-btn{
     margin-top:30px;
     display:inline-block;
-    background:#22c55e;
+    background:#ff2d2d;
     padding:15px 30px;
     border-radius:12px;
     text-decoration:none;
     color:white;
     font-weight:600;
     transition:0.3s;
+    box-shadow:0 0 20px rgba(255,0,0,0.5);
 }
 
 .download-btn:hover{
-    background:#16a34a;
+    background:#ff4d4d;
+    box-shadow:0 0 30px rgba(255,0,0,0.8);
 }
 
 .app-image{
     width:420px;
     max-width:100%;
     border-radius:16px;
-    box-shadow:0 0 40px rgba(88,101,242,0.4);
+    box-shadow:0 0 40px rgba(255,0,0,0.4);
 }
 
 iframe{
@@ -218,6 +220,7 @@ footer{
     }
 }
 </style>
+
 </head>
 
 <body>
@@ -304,6 +307,7 @@ footer{
 
 </body>
 </html>
+
 
 
 
