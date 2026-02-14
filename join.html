@@ -1,144 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="style.css">
-    <meta charset="UTF-8">
-    <title>Join ZLT Co.</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Join | ZLT Co.</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="favicon.ico">
+<link rel="stylesheet" href="style.css">
 
-    <link rel="icon" href="favicon.ico">
+<style>
+.main-content{
+    padding:120px 20px;
+    text-align:center;
+}
 
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', sans-serif;
-            background: #0f0f14;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        header {
-            padding: 20px 40px;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            color: white;
-        }
-
-        .logo img {
-            height: 45px;
-        }
-
-        .logo h1 {
-            margin: 0;
-            font-size: 22px;
-            font-weight: 600;
-        }
-
-        .hero {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 40px;
-        }
-
-        .hero h2 {
-            font-size: 40px;
-            margin-bottom: 15px;
-        }
-
-        .hero p {
-            max-width: 600px;
-            opacity: 0.8;
-            margin-bottom: 40px;
-        }
-
-        .buttons {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .btn {
-            padding: 14px 28px;
-            border-radius: 8px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: 0.3s ease;
-        }
-
-        .btn-discord {
-            background: #ff2d2d;
-            color: white;
-        }
-
-        .btn-discord:hover {
-            background: #ff4d4d;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
-        }
-
-        .btn-github {
-            background: transparent;
-            border: 2px solid #ff2d2d;
-            color: #ff2d2d;
-        }
-
-        .btn-github:hover {
-            background: #ff2d2d;
-            color: white;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
-        }
-
-        footer {
-            text-align: center;
-            padding: 20px;
-            opacity: 0.6;
-            font-size: 14px;
-        }
-    </style>
+.buttons{
+    margin-top:40px;
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    flex-wrap:wrap;
+}
+</style>
 </head>
 
 <body>
 
-<header>
-    <a href="index.html" class="logo">
-        <img src="favicon.ico" alt="ZLT Co Logo">
-        <h1>ZLT Co.</h1>
-    </a>
-</header>
+<nav>
+    <h1><a href="index.html" style="color:white;text-decoration:none;">ZLT Co.</a></h1>
+    <div>
+        <a href="apps.html">Apps</a>
+        <a href="about.html">About</a>
+        <a href="coming-soon.html">Coming Soon</a>
+        <a href="legal.html">Legal</a>
+        <a href="join.html">Join</a>
+    </div>
+</nav>
 
-<section class="hero">
-    <h2>Join the ZLT Community</h2>
-    <p>
-        Whether you're into tech, gaming, development, or just want a chill place to hang out,
-        you're welcome here. Join our Discord to connect, or follow development on GitHub.
+<div class="main-content">
+    <h1>Join the ZLT Community</h1>
+
+    <p style="color:#aaa; max-width:600px; margin:20px auto;">
+        Whether you're into tech, gaming, development,
+        or want a place to hang out,
+        you're welcome here.
     </p>
 
     <div class="buttons">
-        <a href="https://discord.com/invite/qGbqGC2uCs" class="btn btn-discord" target="_blank">
-            Join Discord
+        <a href="https://discord.gg/qGbqGC2uCs"
+           class="btn" target="_blank">
+           Join Discord
         </a>
 
-        <a href="https://github.com/zlt-co" class="btn btn-github" target="_blank">
-            View GitHub
+        <a href="https://github.com/ZLT-CO"
+           class="btn" target="_blank">
+           Visit GitHub
         </a>
     </div>
-</section>
+</div>
 
 <footer>
-    © 2026 ZLT Co. All rights reserved.
+    © 2026 ZLT Co.
 </footer>
 
+<script src="script.js"></script>
 </body>
 </html>
-
