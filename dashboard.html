@@ -12,13 +12,43 @@ body{
   font-family:'Inter',sans-serif;
   background:#0f1117;
   color:white;
-  padding:40px;
 }
 
-.top{
+/* NAV */
+.nav{
   display:flex;
   justify-content:space-between;
   align-items:center;
+  padding:20px 40px;
+  background:#161b22;
+}
+
+.nav a{
+  color:#aaa;
+  text-decoration:none;
+  margin-left:20px;
+}
+
+.nav a:hover{
+  color:white;
+}
+
+.logo{
+  font-weight:800;
+}
+
+/* MAIN */
+.container{
+  padding:40px;
+  max-width:1000px;
+  margin:auto;
+}
+
+.card{
+  background:#161b22;
+  padding:25px;
+  border-radius:16px;
+  margin-bottom:30px;
 }
 
 button{
@@ -28,52 +58,73 @@ button{
   cursor:pointer;
   background:#e11d48;
   color:white;
+  font-weight:600;
 }
 
-.card{
-  background:#161b22;
-  padding:30px;
-  border-radius:16px;
-  margin-top:30px;
+button:hover{
+  opacity:0.85;
+}
+
+input, textarea{
+  width:100%;
+  padding:10px;
+  border-radius:8px;
+  border:none;
+  margin-top:10px;
+  margin-bottom:10px;
+}
+
+.thread{
+  background:#222;
+  padding:15px;
+  border-radius:10px;
+  margin-top:10px;
 }
 </style>
 </head>
 
 <body>
+
 <div class="nav">
-  <div class="logo">ZLT</div>
-  <div class="links">
+  <div class="logo">ZLT Dashboard</div>
+  <div>
     <a href="index.html">Home</a>
     <a href="pcinfo.html">PCInfo</a>
     <a href="forum.html">Forum</a>
-    <a href="dashboard.html">Dashboard</a>
     <a href="https://discord.gg/qGbqGC2uCs" target="_blank">Discord</a>
+    <a href="#" id="logoutBtn">Logout</a>
   </div>
 </div>
 
-<div class="top">
+<div class="container">
+
   <h2 id="welcome">Loading...</h2>
-  <button id="logoutBtn">Logout</button>
-</div>
 
-<div class="card">
-  <h3>PCInfo Downloads</h3>
-  <p id="downloadCount">Loading...</p>
-  <button id="downloadBtn">Download PCInfo</button>
-</div>
+  <div class="card">
+    <h3>PCInfo Download</h3>
+    <p id="downloadCount">Loading downloads...</p>
+    <button id="downloadBtn">Download PCInfo</button>
+  </div>
 
-<div class="card">
-  <h3>Forum</h3>
-  <textarea id="postInput" placeholder="Write something..." style="width:100%;padding:10px;border-radius:8px;"></textarea>
-  <button id="postBtn" style="margin-top:10px;">Post</button>
-  <div id="posts" style="margin-top:20px;"></div>
+  <div class="card">
+    <h3>Create Thread</h3>
+    <input id="threadTitle" placeholder="Thread title...">
+    <textarea id="threadContent" placeholder="Write something..."></textarea>
+    <button id="createThreadBtn">Post Thread</button>
+  </div>
+
+  <div class="card">
+    <h3>Forum Threads</h3>
+    <div id="threads"></div>
+  </div>
+
 </div>
 
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, updateDoc, increment, getDoc, addDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, addDoc, collection, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBfeHZtjuYfoWdRL2-gYZ2Wx0oZeFa1RJ0",
@@ -89,54 +140,83 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 onAuthStateChanged(auth, async (user) => {
-  if (!user) {
+  if(!user){
     window.location.href = "login.html";
   } else {
-    document.getElementById("welcome").innerText = "Welcome " + user.displayName;
+    document.getElementById("welcome").innerText = "Welcome, " + user.displayName;
     loadDownloads();
-    loadPosts();
+    loadThreads();
   }
 });
 
 document.getElementById("logoutBtn").onclick = () => signOut(auth);
 
+/* DOWNLOAD SYSTEM */
+
 async function loadDownloads(){
-  const ref = doc(db, "stats", "pcinfo");
+  const ref = doc(db,"stats","pcinfo");
   const snap = await getDoc(ref);
-  if(snap.exists()){
-    document.getElementById("downloadCount").innerText = snap.data().downloads + " downloads";
+
+  if(!snap.exists()){
+    await setDoc(ref,{downloads:0});
+    document.getElementById("downloadCount").innerText = "0 downloads";
   } else {
-    await updateDoc(ref, {downloads:0});
+    document.getElementById("downloadCount").innerText =
+      snap.data().downloads + " downloads";
   }
 }
 
 document.getElementById("downloadBtn").onclick = async () => {
-  const ref = doc(db, "stats", "pcinfo");
-  await updateDoc(ref, {downloads: increment(1)});
-  window.open("https://github.com/ZLT-CO/PCInfo/releases/download/PCInfo/PCInfo-v1.00.zip");
+  const ref = doc(db,"stats","pcinfo");
+  await updateDoc(ref,{downloads: increment(1)});
+  window.open("YOUR_ZIP_LINK_HERE");
 };
 
-async function loadPosts(){
-  const snapshot = await getDocs(collection(db, "posts"));
-  snapshot.forEach(doc => {
-    const post = doc.data();
-    document.getElementById("posts").innerHTML += 
-      "<div style='margin-top:10px;background:#222;padding:10px;border-radius:8px;'>"
-      + post.author + ": " + post.text + "</div>";
+/* FORUM */
+
+document.getElementById("createThreadBtn").onclick = async () => {
+  const title = document.getElementById("threadTitle").value.trim();
+  const content = document.getElementById("threadContent").value.trim();
+  const user = auth.currentUser;
+
+  if(title.length < 3){
+    alert("Title must be at least 3 characters.");
+    return;
+  }
+
+  if(content.length < 1 || content.length > 500){
+    alert("Message must be 1-500 characters.");
+    return;
+  }
+
+  await addDoc(collection(db,"threads"),{
+    title:title,
+    content:content,
+    author:user.displayName,
+    createdAt:serverTimestamp()
+  });
+
+  document.getElementById("threadTitle").value="";
+  document.getElementById("threadContent").value="";
+  loadThreads();
+};
+
+async function loadThreads(){
+  const snapshot = await getDocs(collection(db,"threads"));
+  const container = document.getElementById("threads");
+  container.innerHTML="";
+
+  snapshot.forEach(docSnap=>{
+    const data = docSnap.data();
+    container.innerHTML += `
+      <div class="thread">
+        <strong>${data.title}</strong><br>
+        <small>by ${data.author}</small>
+        <p>${data.content}</p>
+      </div>
+    `;
   });
 }
-
-document.getElementById("postBtn").onclick = async () => {
-  const text = document.getElementById("postInput").value;
-  const user = auth.currentUser;
-  if(text){
-    await addDoc(collection(db, "posts"), {
-      text: text,
-      author: user.displayName
-    });
-    location.reload();
-  }
-};
 
 </script>
 
