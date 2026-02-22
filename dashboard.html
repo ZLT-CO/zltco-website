@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>ZLT Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:'Inter',sans-serif;
+  background:#0f1117;
+  color:white;
+  padding:40px;
+}
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+button{
+  padding:10px 20px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  background:#e11d48;
+  color:white;
+}
+
+.card{
+  background:#161b22;
+  padding:30px;
+  border-radius:16px;
+  margin-top:30px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="top">
+  <h2 id="welcome">Loading...</h2>
+  <button id="logoutBtn">Logout</button>
+</div>
+
+<div class="card">
+  <h3>PCInfo Downloads</h3>
+  <p id="downloadCount">Loading...</p>
+  <button id="downloadBtn">Download PCInfo</button>
+</div>
+
+<div class="card">
+  <h3>Forum</h3>
+  <textarea id="postInput" placeholder="Write something..." style="width:100%;padding:10px;border-radius:8px;"></textarea>
+  <button id="postBtn" style="margin-top:10px;">Post</button>
+  <div id="posts" style="margin-top:20px;"></div>
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, updateDoc, increment, getDoc, addDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBfeHZtjuYfoWdRL2-gYZ2Wx0oZeFa1RJ0",
+  authDomain: "zlt-co.firebaseapp.com",
+  projectId: "zlt-co",
+  storageBucket: "zlt-co.firebasestorage.app",
+  messagingSenderId: "314898532151",
+  appId: "1:314898532151:web:c7e17c09b08d984f11bcb2"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    window.location.href = "login.html";
+  } else {
+    document.getElementById("welcome").innerText = "Welcome " + user.displayName;
+    loadDownloads();
+    loadPosts();
+  }
+});
+
+document.getElementById("logoutBtn").onclick = () => signOut(auth);
+
+async function loadDownloads(){
+  const ref = doc(db, "stats", "pcinfo");
+  const snap = await getDoc(ref);
+  if(snap.exists()){
+    document.getElementById("downloadCount").innerText = snap.data().downloads + " downloads";
+  } else {
+    await updateDoc(ref, {downloads:0});
+  }
+}
+
+document.getElementById("downloadBtn").onclick = async () => {
+  const ref = doc(db, "stats", "pcinfo");
+  await updateDoc(ref, {downloads: increment(1)});
+  window.open("YOUR_ZIP_LINK_HERE");
+};
+
+async function loadPosts(){
+  const snapshot = await getDocs(collection(db, "posts"));
+  snapshot.forEach(doc => {
+    const post = doc.data();
+    document.getElementById("posts").innerHTML += 
+      "<div style='margin-top:10px;background:#222;padding:10px;border-radius:8px;'>"
+      + post.author + ": " + post.text + "</div>";
+  });
+}
+
+document.getElementById("postBtn").onclick = async () => {
+  const text = document.getElementById("postInput").value;
+  const user = auth.currentUser;
+  if(text){
+    await addDoc(collection(db, "posts"), {
+      text: text,
+      author: user.displayName
+    });
+    location.reload();
+  }
+};
+
+</script>
+
+</body>
+</html>
