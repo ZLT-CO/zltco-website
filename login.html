@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>ZLT Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body style="background:#0f1117;color:white;text-align:center;padding-top:150px;font-family:sans-serif;">
+
+<h2>Sign in to ZLT</h2>
+
+<button id="loginBtn" style="padding:15px 30px;font-size:16px;cursor:pointer;">
+  Sign in with Google
+</button>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBfeHZtjuYfoWdRL2-gYZ2Wx0oZeFa1RJ0",
+  authDomain: "zlt-co.firebaseapp.com",
+  projectId: "zlt-co",
+  storageBucket: "zlt-co.firebasestorage.app",
+  messagingSenderId: "314898532151",
+  appId: "1:314898532151:web:c7e17c09b08d984f11bcb2"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+document.getElementById("loginBtn").onclick = async () => {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    alert("Welcome " + result.user.displayName);
+    window.location.href = "dashboard.html";
+  } catch (error) {
+    alert("Login failed: " + error.message);
+  }
+};
+
+</script>
+
+</body>
+</html>
