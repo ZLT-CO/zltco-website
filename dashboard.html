@@ -193,7 +193,7 @@ async function loadDownloads(){
 document.getElementById("downloadBtn").onclick=async()=>{
   const ref=doc(db,"stats","pcinfo");
   await updateDoc(ref,{downloads:increment(1)});
-  window.open("YOUR_ZIP_LINK_HERE");
+  window.open("https://github.com/ZLT-CO/PCInfo/releases/download/PCInfo/PCInfo-v1.00.zip");
 };
 
 /* THREADS + REPLIES */
