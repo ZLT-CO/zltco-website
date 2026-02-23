@@ -14,7 +14,7 @@ body{
   color:white;
 }
 
-/* Animated red glow */
+/* Red Glow */
 body::before{
   content:"";
   position:fixed;
@@ -27,7 +27,6 @@ body::before{
   z-index:-1;
 }
 
-/* NAV */
 .nav{
   display:flex;
   justify-content:space-between;
@@ -50,9 +49,8 @@ body::before{
   font-weight:800;
 }
 
-/* MAIN */
 .container{
-  max-width:1000px;
+  max-width:900px;
   margin:auto;
   padding:40px 20px;
 }
@@ -79,30 +77,15 @@ button:hover{
   opacity:0.85;
 }
 
-input, textarea{
-  width:100%;
-  padding:10px;
-  border-radius:8px;
-  border:none;
-  margin-top:10px;
-  margin-bottom:10px;
-  background:#222;
-  color:white;
-}
-
-.thread{
-  background:#1c1f26;
-  padding:15px;
-  border-radius:12px;
+.toggle{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
   margin-top:15px;
 }
 
-.reply{
-  background:#252932;
-  padding:10px;
-  border-radius:8px;
-  margin-top:8px;
-  margin-left:15px;
+.download-btn{
+  margin-top:15px;
 }
 </style>
 </head>
@@ -113,7 +96,6 @@ input, textarea{
   <div class="logo">ZLT Dashboard</div>
   <div>
     <a href="index.html">Home</a>
-    <a href="pcinfo.html">PCInfo</a>
     <a href="https://discord.gg/qGbqGC2uCs" target="_blank">Discord</a>
     <a href="#" id="logoutBtn">Logout</a>
   </div>
@@ -124,21 +106,27 @@ input, textarea{
 <h2 id="welcome">Loading...</h2>
 
 <div class="card">
-  <h3>PCInfo Downloads</h3>
-  <p id="downloadCount">Loading...</p>
-  <button id="downloadBtn">Download PCInfo</button>
+  <h3>Your Profile</h3>
+  <p><strong>Email:</strong> <span id="email"></span></p>
+  <p><strong>Member Since:</strong> <span id="joined"></span></p>
 </div>
 
 <div class="card">
-  <h3>Create Thread</h3>
-  <input id="threadTitle" placeholder="Thread title">
-  <textarea id="threadContent" placeholder="Thread message"></textarea>
-  <button id="createThreadBtn">Post Thread</button>
+  <h3>Email Updates</h3>
+  <div class="toggle">
+    <span>Receive PCInfo update emails</span>
+    <input type="checkbox" id="emailToggle">
+  </div>
+  <button style="margin-top:15px;" id="savePrefs">Save Preferences</button>
+  <p id="statusMsg" style="color:#aaa;"></p>
 </div>
 
 <div class="card">
-  <h3>Forum</h3>
-  <div id="threads"></div>
+  <h3>PCInfo</h3>
+  <p>Download the latest version of PCInfo.</p>
+  <button class="download-btn" onclick="window.open('https://github.com/ZLT-CO/PCInfo/releases/download/PCInfo/PCInfo-v1.00.zip')">
+    Download PCInfo v1.00
+  </button>
 </div>
 
 </div>
@@ -147,9 +135,7 @@ input, textarea{
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, increment,
-         addDoc, collection, getDocs, serverTimestamp } 
-from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBfeHZtjuYfoWdRL2-gYZ2Wx0oZeFa1RJ0",
@@ -164,116 +150,41 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-onAuthStateChanged(auth, user=>{
+onAuthStateChanged(auth, async (user)=>{
   if(!user){
     window.location.href="login.html";
   } else {
     document.getElementById("welcome").innerText="Welcome, "+user.displayName;
-    loadDownloads();
-    loadThreads();
+    document.getElementById("email").innerText=user.email;
+
+    const userRef=doc(db,"users",user.uid);
+    const snap=await getDoc(userRef);
+
+    if(!snap.exists()){
+      await setDoc(userRef,{
+        email:user.email,
+        subscribed:false,
+        joined:serverTimestamp()
+      });
+      document.getElementById("joined").innerText="Just now";
+    } else {
+      const data=snap.data();
+      document.getElementById("emailToggle").checked=data.subscribed;
+      document.getElementById("joined").innerText="Active Member";
+    }
+
+    document.getElementById("savePrefs").onclick=async()=>{
+      await setDoc(userRef,{
+        email:user.email,
+        subscribed:document.getElementById("emailToggle").checked,
+        joined:serverTimestamp()
+      });
+      document.getElementById("statusMsg").innerText="Preferences saved.";
+    };
   }
 });
 
 document.getElementById("logoutBtn").onclick=()=>signOut(auth);
-
-/* DOWNLOAD SYSTEM */
-
-async function loadDownloads(){
-  const ref=doc(db,"stats","pcinfo");
-  const snap=await getDoc(ref);
-  if(!snap.exists()){
-    await setDoc(ref,{downloads:0});
-    document.getElementById("downloadCount").innerText="0 downloads";
-  } else {
-    document.getElementById("downloadCount").innerText=
-      snap.data().downloads+" downloads";
-  }
-}
-
-document.getElementById("downloadBtn").onclick=async()=>{
-  const ref=doc(db,"stats","pcinfo");
-  await updateDoc(ref,{downloads:increment(1)});
-  window.open("https://github.com/ZLT-CO/PCInfo/releases/download/PCInfo/PCInfo-v1.00.zip");
-};
-
-/* THREADS + REPLIES */
-
-document.getElementById("createThreadBtn").onclick=async()=>{
-  const title=document.getElementById("threadTitle").value.trim();
-  const content=document.getElementById("threadContent").value.trim();
-  const user=auth.currentUser;
-
-  if(title.length<3){alert("Title too short");return;}
-  if(content.length<1||content.length>500){alert("Message 1-500 chars");return;}
-
-  await addDoc(collection(db,"threads"),{
-    title:title,
-    content:content,
-    author:user.displayName,
-    createdAt:serverTimestamp()
-  });
-
-  document.getElementById("threadTitle").value="";
-  document.getElementById("threadContent").value="";
-  loadThreads();
-};
-
-async function loadThreads(){
-  const snapshot=await getDocs(collection(db,"threads"));
-  const container=document.getElementById("threads");
-  container.innerHTML="";
-
-  snapshot.forEach(async docSnap=>{
-    const data=docSnap.data();
-    const threadId=docSnap.id;
-
-    let threadHTML=`
-      <div class="thread">
-        <strong>${data.title}</strong><br>
-        <small>by ${data.author}</small>
-        <p>${data.content}</p>
-
-        <textarea id="reply-${threadId}" placeholder="Write a reply..."></textarea>
-        <button onclick="postReply('${threadId}')">Reply</button>
-
-        <div id="replies-${threadId}"></div>
-      </div>
-    `;
-
-    container.innerHTML+=threadHTML;
-
-    const repliesSnap=await getDocs(collection(db,"threads",threadId,"replies"));
-    repliesSnap.forEach(r=>{
-      const reply=r.data();
-      document.getElementById("replies-"+threadId).innerHTML+=`
-        <div class="reply">
-          <small>${reply.author}</small>
-          <p>${reply.text}</p>
-        </div>
-      `;
-    });
-  });
-}
-
-window.postReply=async(threadId)=>{
-  const input=document.getElementById("reply-"+threadId);
-  const text=input.value.trim();
-  const user=auth.currentUser;
-
-  if(text.length<1||text.length>300){
-    alert("Reply must be 1-300 characters");
-    return;
-  }
-
-  await addDoc(collection(db,"threads",threadId,"replies"),{
-    text:text,
-    author:user.displayName,
-    createdAt:serverTimestamp()
-  });
-
-  input.value="";
-  loadThreads();
-};
 
 </script>
 
