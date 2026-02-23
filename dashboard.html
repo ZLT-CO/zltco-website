@@ -2,90 +2,163 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>ZLT Dashboard</title>
+<title>ZLT Control Center</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
 
 <style>
+*{
+  box-sizing:border-box;
+}
+
 body{
   margin:0;
   font-family:'Inter',sans-serif;
-  background:#0f1117;
+  background:#0b0d12;
   color:white;
+  overflow-x:hidden;
 }
 
-/* Red Glow */
+/* Premium Background Glow */
 body::before{
   content:"";
   position:fixed;
-  width:200%;
-  height:200%;
+  inset:0;
   background:
-    radial-gradient(circle at 20% 30%, #ff1e56 0%, transparent 40%),
-    radial-gradient(circle at 80% 70%, #e11d48 0%, transparent 40%);
-  opacity:0.15;
+    radial-gradient(circle at 20% 30%, rgba(255,30,86,0.25), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(225,29,72,0.2), transparent 40%);
   z-index:-1;
 }
 
+/* NAVBAR */
 .nav{
   display:flex;
   justify-content:space-between;
-  padding:20px 40px;
-  background:#161b22cc;
-  backdrop-filter:blur(10px);
+  align-items:center;
+  padding:20px 60px;
+  backdrop-filter:blur(20px);
+  background:rgba(18,20,28,0.6);
+  border-bottom:1px solid rgba(255,255,255,0.05);
+}
+
+.logo{
+  font-weight:800;
+  font-size:20px;
+  background:linear-gradient(135deg,#ff1e56,#e11d48);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
 }
 
 .nav a{
-  color:#aaa;
+  color:#9ca3af;
   text-decoration:none;
-  margin-left:20px;
+  margin-left:25px;
+  font-weight:500;
+  transition:0.2s;
 }
 
 .nav a:hover{
   color:white;
 }
 
-.logo{
-  font-weight:800;
-}
-
-.container{
-  max-width:900px;
+/* HERO */
+.hero{
+  padding:60px;
+  max-width:1200px;
   margin:auto;
-  padding:40px 20px;
 }
 
+.hero h1{
+  font-size:36px;
+  font-weight:800;
+  margin-bottom:10px;
+}
+
+.hero p{
+  color:#9ca3af;
+  margin-top:0;
+}
+
+/* GRID LAYOUT */
+.dashboard{
+  display:grid;
+  grid-template-columns: repeat(auto-fit,minmax(320px,1fr));
+  gap:25px;
+  padding:0 60px 60px 60px;
+  max-width:1200px;
+  margin:auto;
+}
+
+/* CARD */
 .card{
-  background:#161b22;
-  padding:25px;
-  border-radius:18px;
-  margin-bottom:30px;
-  border:1px solid #222;
+  background:rgba(20,22,32,0.75);
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,0.05);
+  border-radius:22px;
+  padding:28px;
+  transition:0.25s ease;
+  box-shadow:0 10px 30px rgba(0,0,0,0.4);
 }
 
-button{
-  padding:10px 18px;
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
+.card:hover{
+  transform:translateY(-4px);
+  border:1px solid rgba(255,30,86,0.3);
+}
+
+.card h3{
+  margin-top:0;
   font-weight:600;
+}
+
+/* BADGES */
+.badge{
+  display:inline-block;
+  padding:6px 12px;
+  border-radius:12px;
+  font-size:13px;
+  font-weight:600;
+  background:rgba(74,222,128,0.15);
+  color:#4ade80;
+}
+
+/* BUTTONS */
+button{
+  margin-top:15px;
+  padding:12px 18px;
+  border:none;
+  border-radius:12px;
+  font-weight:600;
+  cursor:pointer;
   background:linear-gradient(135deg,#ff1e56,#e11d48);
   color:white;
+  transition:0.25s;
+  box-shadow:0 8px 20px rgba(225,29,72,0.4);
 }
 
 button:hover{
-  opacity:0.85;
+  transform:translateY(-2px);
+  box-shadow:0 12px 30px rgba(225,29,72,0.6);
 }
 
+/* TOGGLE */
 .toggle{
   display:flex;
-  align-items:center;
   justify-content:space-between;
+  align-items:center;
   margin-top:15px;
 }
 
-.download-btn{
-  margin-top:15px;
+input[type="checkbox"]{
+  width:20px;
+  height:20px;
+  accent-color:#ff1e56;
+}
+
+/* FOOTER STYLE STATUS */
+.status-text{
+  font-size:14px;
+  color:#9ca3af;
+  margin-top:10px;
 }
 </style>
 </head>
@@ -93,7 +166,7 @@ button:hover{
 <body>
 
 <div class="nav">
-  <div class="logo">ZLT Dashboard</div>
+  <div class="logo">ZLT Control</div>
   <div>
     <a href="index.html">Home</a>
     <a href="https://discord.gg/qGbqGC2uCs" target="_blank">Discord</a>
@@ -101,38 +174,41 @@ button:hover{
   </div>
 </div>
 
-<div class="container">
-
-<h2 id="welcome">Loading...</h2>
-
-<div class="card">
-  <h3>Your Profile</h3>
-  <p><strong>Email:</strong> <span id="email"></span></p>
-  <p><strong>Member Since:</strong> <span id="joined"></span></p>
+<div class="hero">
+  <h1 id="welcome">Loading...</h1>
+  <p>Manage your account and access PCInfo tools.</p>
 </div>
 
-<div class="card">
-  <h3>Email Updates</h3>
-  <div class="toggle">
-    <span>Receive PCInfo update emails</span>
-    <input type="checkbox" id="emailToggle">
+<div class="dashboard">
+
+  <div class="card">
+    <h3>Account</h3>
+    <p><strong>Email</strong><br><span id="email"></span></p>
+    <p><strong>Status</strong><br><span class="badge">Active Member</span></p>
   </div>
-  <button style="margin-top:15px;" id="savePrefs">Save Preferences</button>
-  <p id="statusMsg" style="color:#aaa;"></p>
-</div>
 
-<div class="card">
-  <h3>PCInfo</h3>
-  <p>Download the latest version of PCInfo.</p>
-  <button class="download-btn" onclick="window.open('https://github.com/ZLT-CO/PCInfo/releases/download/PCInfo/PCInfo-v1.00.zip')">
-    Download PCInfo v1.00
-  </button>
-</div>
+  <div class="card">
+    <h3>Preferences</h3>
+    <div class="toggle">
+      <span>Receive update notifications</span>
+      <input type="checkbox" id="emailToggle">
+    </div>
+    <button id="savePrefs">Save Changes</button>
+    <div id="statusMsg" class="status-text"></div>
+  </div>
+
+  <div class="card">
+    <h3>PCInfo</h3>
+    <p>Latest Stable Release</p>
+    <div class="badge">v1.00</div>
+    <button onclick="window.open('https://github.com/ZLT-CO/PCInfo/releases/download/PCInfo/PCInfo-v1.00.zip')">
+      Download Now
+    </button>
+  </div>
 
 </div>
 
 <script type="module">
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -154,7 +230,7 @@ onAuthStateChanged(auth, async (user)=>{
   if(!user){
     window.location.href="login.html";
   } else {
-    document.getElementById("welcome").innerText="Welcome, "+user.displayName;
+    document.getElementById("welcome").innerText="Welcome back, "+(user.displayName || "User");
     document.getElementById("email").innerText=user.email;
 
     const userRef=doc(db,"users",user.uid);
@@ -166,11 +242,8 @@ onAuthStateChanged(auth, async (user)=>{
         subscribed:false,
         joined:serverTimestamp()
       });
-      document.getElementById("joined").innerText="Just now";
     } else {
-      const data=snap.data();
-      document.getElementById("emailToggle").checked=data.subscribed;
-      document.getElementById("joined").innerText="Active Member";
+      document.getElementById("emailToggle").checked=snap.data().subscribed;
     }
 
     document.getElementById("savePrefs").onclick=async()=>{
@@ -179,13 +252,12 @@ onAuthStateChanged(auth, async (user)=>{
         subscribed:document.getElementById("emailToggle").checked,
         joined:serverTimestamp()
       });
-      document.getElementById("statusMsg").innerText="Preferences saved.";
+      document.getElementById("statusMsg").innerText="Changes saved successfully.";
     };
   }
 });
 
 document.getElementById("logoutBtn").onclick=()=>signOut(auth);
-
 </script>
 
 </body>
