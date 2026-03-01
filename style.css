@@ -98,3 +98,53 @@ footer{
     text-align:center;
     color:#666;
 }
+
+.hero{
+    padding:80px 20px;
+    text-align:center;
+}
+
+.hero-inner{
+    max-width:800px;
+    margin:auto;
+}
+
+.logo img{
+    width:80px;
+    margin-bottom:20px;
+}
+
+.hero h2{
+    font-size:34px;
+    margin-bottom:15px;
+}
+
+.hero p{
+    color:#9ca3af;
+    max-width:600px;
+    margin:0 auto 30px auto;
+    line-height:1.6;
+}
+
+.hero-buttons{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    flex-wrap:wrap; /* THIS fixes mobile */
+}
+
+.btn{
+    padding:12px 20px;
+    border-radius:12px;
+    background:linear-gradient(135deg,#ff1e56,#e11d48);
+    color:white;
+    text-decoration:none;
+    font-weight:600;
+    transition:0.25s;
+    box-shadow:0 8px 20px rgba(225,29,72,0.4);
+}
+
+.btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 12px 30px rgba(225,29,72,0.6);
+}
